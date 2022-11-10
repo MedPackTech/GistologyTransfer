@@ -37,7 +37,7 @@
             // 
             // button1
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
@@ -53,7 +53,7 @@
             // 
             // button3
             // 
-            this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.button3.BackColor = System.Drawing.SystemColors.ControlLight;
             this.button3.Location = new System.Drawing.Point(408, 169);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(318, 55);
@@ -67,31 +67,37 @@
             this.progressBar1.Location = new System.Drawing.Point(12, 242);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1151, 57);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 3;
+            this.progressBar1.Value = 50;
             this.progressBar1.Visible = false;
             // 
             // button2
             // 
+            this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button2.Location = new System.Drawing.Point(408, 408);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(318, 56);
             this.button2.TabIndex = 4;
             this.button2.Text = "Закрыть";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1175, 526);
+            this.BackColor = System.Drawing.SystemColors.GrayText;
+            this.ClientSize = new System.Drawing.Size(1176, 526);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Выгрузка исследований";
             this.ResumeLayout(false);
