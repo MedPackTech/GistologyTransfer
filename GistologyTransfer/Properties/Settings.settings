@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="Folder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\</Value>
+      <Value Profile="(Default)">C:\Unload</Value>
     </Setting>
     <Setting Name="DateFrom" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)">2022-11-01</Value>
@@ -13,6 +13,9 @@
     </Setting>
     <Setting Name="ConnString" Type="System.String" Scope="User">
       <Value Profile="(Default)">Server=localhost;Port=5432;Database=Unim;UserId=postgres;Password=postgres;</Value>
+    </Setting>
+    <Setting Name="ArchivFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Test</Value>
     </Setting>
   </Settings>
 </SettingsFile>

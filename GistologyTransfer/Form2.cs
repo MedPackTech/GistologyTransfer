@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using GistologyTransfer;
+using System.Globalization;
 
 namespace GistologyTransfer
 {
@@ -21,6 +23,7 @@ namespace GistologyTransfer
             dateTimePicker1.Value = Properties.Settings.Default.DateFrom;
             dateTimePicker2.Value = Properties.Settings.Default.DateTo;
             textBox2.Text = Properties.Settings.Default.ConnString;
+            textBox3.Text = Properties.Settings.Default.ArchivFolder;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -38,12 +41,20 @@ namespace GistologyTransfer
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private async void button2_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Folder = textBox1.Text;
             Properties.Settings.Default.DateFrom = this.dateTimePicker1.Value;
             Properties.Settings.Default.DateTo = this.dateTimePicker2.Value;
-            Properties.Settings.Default.ConnString = textBox2.Text;
+            if (!Properties.Settings.Default.ConnString.ToLower().StartsWith("server="))
+            {
+                Properties.Settings.Default.ConnString = textBox2.Text;
+            }
+            else
+            {
+                Properties.Settings.Default.ConnString = await Encryptor.AES_EcnryptAsync(textBox2.Text);
+            }
+            Properties.Settings.Default.ArchivFolder = textBox3.Text;
             Properties.Settings.Default.Save();
             MessageBox.Show("Настройки сохранены", "Информация",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
@@ -80,6 +91,21 @@ namespace GistologyTransfer
             {
                 MessageBox.Show("Дата окончания не может быть меньше даты начала", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 dateTimePicker2.Value = Properties.Settings.Default.DateFrom;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+
+                    textBox3.Text = fbd.SelectedPath;
+
+                }
             }
         }
     }

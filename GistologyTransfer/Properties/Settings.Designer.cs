@@ -25,7 +25,7 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Unload")]
         public string Folder {
             get {
                 return ((string)(this["Folder"]));
@@ -68,6 +68,18 @@ namespace GistologyTransfer.Properties {
             }
             set {
                 this["ConnString"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Test")]
+        public string ArchivFolder {
+            get {
+                return ((string)(this["ArchivFolder"]));
+            }
+            set {
+                this["ArchivFolder"] = value;
             }
         }
     }
