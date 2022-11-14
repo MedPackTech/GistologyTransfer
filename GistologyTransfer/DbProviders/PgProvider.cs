@@ -27,7 +27,7 @@ namespace GistologyTransfer.DbProviders
                                 f.title,
                                 cast(count(*) over (partition by c.id,substr(f.title,position('-' in f.title)+1,1)) as varchar(10)) as prepnumber,
                                 substr(f.title,position('-' in f.title)+1,1) as morder,
-                                'abcabc' as model,
+                                'Leica AT2' as model,
                                 20 as vision,
                                 1 as focus,
                                 r.micro_description_protocol_text,
@@ -37,7 +37,7 @@ namespace GistologyTransfer.DbProviders
                                 Inner join files as f on f.case_id = c.id and f.type = 'snapshot' and f.title not like '%S%'
                                 Where 
                                 c.status = 'validated'
-                                and c.creation_date between @Bdate::TIMESTAMP and @Fdate::TIMESTAMP
+                                and r.validation_ended_date between @Bdate::date and @Fdate::date + 1 - interval '1 sec'
                                 ORDER BY id, morder, f.title";
 
             List<UnimCase> res = new List<UnimCase>();
@@ -86,7 +86,7 @@ namespace GistologyTransfer.DbProviders
                                         cId = currCaseId;
 
                                         cc.IdIssled = rd.IsDBNull(0) ? String.Empty : rd.GetString(0).Trim();
-                                        cc.ExternalId = rd.IsDBNull(1) ? String.Empty : rd.GetString(1).Trim();
+                                        cc.ExternalId = rd.IsDBNull(2) ? String.Empty : rd.GetString(2).Trim();
                                         cc.YearIssled = rd.IsDBNull(4) ? String.Empty : rd.GetString(4).Trim();
                                         cc.Macro = rd.IsDBNull(14) ? String.Empty : rd.GetString(14).Trim();
                                         cc.Micro = rd.IsDBNull(13) ? String.Empty : rd.GetString(13).Trim();
@@ -109,7 +109,7 @@ namespace GistologyTransfer.DbProviders
 
                                     File f = new File();
                                     f.FileReq = rd.IsDBNull(7) ? "" : rd.GetString(7).Trim();
-                                    f.Scanner = "Scanner";
+                                    f.Scanner = "Leica AT2";
                                     f.Resolution = "20";
                                     f.Focus = "1";
                                     ser.Files.Add(f);

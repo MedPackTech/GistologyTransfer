@@ -38,8 +38,6 @@ namespace GistologyTransfer
 
         private async void button3_Click(object sender, EventArgs e)
         {
-        
-
             List<FileArray> Resp = new List<FileArray>();
             label1.Text = "Сканируем архив изображений";
             Resp = DirSearch(Properties.Settings.Default.ArchivFolder, Resp);
@@ -93,9 +91,22 @@ namespace GistologyTransfer
                         }
                     }
 
+                    myexcelWorksheet.Cells[1, 1] = "Номер исследования (случая)";
+                    myexcelWorksheet.Cells[1, 2] = "Серия препаратов";
+                    myexcelWorksheet.Cells[1, 3] = "Файлы";
+                    myexcelWorksheet.Cells[1, 4] = "Слайдов в серии";
+                    myexcelWorksheet.Cells[1, 5] = "Год";
+                    myexcelWorksheet.Cells[1, 6] = "МКБ-10";
+                    myexcelWorksheet.Cells[1, 7] = "МКБ-0-3";
+                    myexcelWorksheet.Cells[1, 8] = "Сканер";
+                    myexcelWorksheet.Cells[1, 9] = "Разрешение сканирования";
+                    myexcelWorksheet.Cells[1, 10] = "Фокус";
+                    myexcelWorksheet.Cells[1, 11] = "Гистологический диагноз";
+                    myexcelWorksheet.Cells[1, 12] = "Дополнительный код";
+                    myexcelWorksheet.Cells[1, 13] = "Макроскопическое описание";
+                    myexcelWorksheet.Cells[1, 14] = "Микроскопическое описание";
 
-
-                    int r = 0;
+                    int r = 1;
 
                     DirectoryInfo rp = new DirectoryInfo(Properties.Settings.Default.Folder);
 
@@ -140,9 +151,9 @@ namespace GistologyTransfer
 
                             foreach (var file in ser.Files)
                             {
-
-                                Regex reg = new Regex(@".*" + file.FileReq + @".*.txt");
-
+                                label1.Text = "Выгружаем изображения: " + (set-1).ToString();
+                                Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
+                                progressBar1.PerformStep();
                                 int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                                 if (ind != -1)
                                 {
@@ -160,9 +171,6 @@ namespace GistologyTransfer
                                     myexcelWorksheet.Cells[r, 9] = file.Resolution;
                                     myexcelWorksheet.Cells[r, 10] = file.Focus;
 
-
-                                    progressBar1.PerformStep();
-
                                 }
 
                             }
@@ -178,6 +186,10 @@ namespace GistologyTransfer
                     MessageBox.Show("Выгрузка Завершена", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     label1.Text = "";
                 }
+                else
+                {
+                    MessageBox.Show("Нет случаев за указанные даты", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
             catch (Exception ex)
             {
@@ -185,10 +197,6 @@ namespace GistologyTransfer
                 label1.Text = "";
                 //throw;
             }
-            
-
-            
-
 
         }
 

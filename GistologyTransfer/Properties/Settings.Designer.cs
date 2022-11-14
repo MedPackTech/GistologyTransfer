@@ -25,7 +25,7 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Unload")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\Nas2\\svs")]
         public string Folder {
             get {
                 return ((string)(this["Folder"]));
@@ -37,7 +37,7 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2022-11-01")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2022-10-01")]
         public global::System.DateTime DateFrom {
             get {
                 return ((global::System.DateTime)(this["DateFrom"]));
@@ -49,7 +49,7 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2022-11-30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2022-10-08")]
         public global::System.DateTime DateTo {
             get {
                 return ((global::System.DateTime)(this["DateTo"]));
@@ -61,7 +61,8 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=localhost;Port=5432;Database=Unim;UserId=postgres;Password=postgres;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=172.18.13.21;Port=5432;Database=dpathology;UserId=rzd;Password=FrvHAWA0ZDu" +
+            "IEIim;")]
         public string ConnString {
             get {
                 return ((string)(this["ConnString"]));
@@ -73,7 +74,7 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Test")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\172.18.13.251\\d$\\lis-scanner\\storage\\archive")]
         public string ArchivFolder {
             get {
                 return ((string)(this["ArchivFolder"]));
