@@ -23,6 +23,7 @@ namespace GistologyTransfer
             InitializeComponent();
         }
 
+        //Кнопка настроек
         private void button1_Click(object sender, EventArgs e)
         {
             Form2 childForm = new Form2();            
@@ -36,18 +37,31 @@ namespace GistologyTransfer
 
         }
 
+        //Кнопка выгрузки
         private async void button3_Click(object sender, EventArgs e)
         {
+            //Просматриваем рекурсивно весь архив изображений и помещаем в массив объектов
             List<FileArray> Resp = new List<FileArray>();
             label1.Text = "Сканируем архив изображений";
             Resp = DirSearch(Properties.Settings.Default.ArchivFolder, Resp);
-
-            PgDbManager pg = new PgDbManager(await Encryptor.AES_DecryptAsync(Properties.Settings.Default.ConnString));
+            string cs = "";
+            try
+            {
+                cs = await Encryptor.AES_DecryptAsync(Properties.Settings.Default.ConnString);
+            }
+            catch (Exception connex)
+            {
+                MessageBox.Show("Ошибка расшифровки строки подключения: " + connex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            //Обращаемся в юним и ищем случаи за нужный период
+            PgDbManager pg = new PgDbManager(cs);
             try
             {
                 label1.Text = "Ищем случаи в DP  " + Properties.Settings.Default.DateFrom.ToString("dd.MM.yyyy") + "-" + Properties.Settings.Default.DateTo.ToString("dd.MM.yyyy");
                 var lst = await pg.GetCasesAsync();
 
+                //Считаем количество файлов к выгрузке для вывода в окно и прогресс бара
                 if (lst.Count > 0)
                 {
                     int set = 0;
@@ -65,10 +79,22 @@ namespace GistologyTransfer
 
                     label1.Text = "Выгружаем изображения: " + set.ToString();
 
-                    Excel.Application myexcelApplication = new Excel.Application();
-                    Excel.Workbook myexcelWorkbook = myexcelApplication.Workbooks.Add();
-                    Excel.Worksheet myexcelWorksheet = (Excel.Worksheet)myexcelWorkbook.Sheets.Add();
-
+                    //Пробуем инициализировать и создать эксельку
+                    Excel.Application myexcelApplication = null;
+                    Excel.Workbook myexcelWorkbook = null;
+                    Excel.Worksheet myexcelWorksheet = null;
+                    try
+                    {
+                        myexcelApplication = new Excel.Application();
+                        myexcelWorkbook = myexcelApplication.Workbooks.Add();
+                        myexcelWorksheet = (Excel.Worksheet)myexcelWorkbook.Sheets.Add();
+                    }
+                    catch (Exception xlex)
+                    {
+                        MessageBox.Show("Ошибка создания Excel-файла: " + xlex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    //Активируем прогресс бар
                     progressBar1.Visible = true;
                     progressBar1.Minimum = 1;
                     progressBar1.Maximum = set;
@@ -78,7 +104,7 @@ namespace GistologyTransfer
                     DirectoryInfo di = new DirectoryInfo(Properties.Settings.Default.Folder);
 
                     string path = Properties.Settings.Default.Folder;
-
+                    //Пробуем создать директорию выгрузки
                     if (Directory.Exists(path))
                     {
                         if (!Directory.Exists(path + @"\" + Properties.Settings.Default.DateFrom.ToString("yyyyMMdd") + "_" + Properties.Settings.Default.DateTo.ToString("yyyyMMdd")))
@@ -137,7 +163,8 @@ namespace GistologyTransfer
                         }
                         catch (Exception ex)
                         {
-
+                            MessageBox.Show("Ошибка создания директории: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
                         }
 
                         foreach (var ser in item.Series)
@@ -145,18 +172,23 @@ namespace GistologyTransfer
                             r = r + 1;
 
                             myexcelWorksheet.Cells[r, 2] = ser.IdSeria;
-                            myexcelWorksheet.Cells[r, 4] = ser.PrepNumber;
+                            //myexcelWorksheet.Cells[r, 4] = ser.PrepNumber;
                             myexcelWorksheet.Cells[r, 6] = ser.Icd10;
                             myexcelWorksheet.Cells[r, 11] = ser.Diagnosis;
 
+                            //Счетчик изображений в серии. Считает по фактически найденным.
+                            int pcount = 0;
+
                             foreach (var file in ser.Files)
                             {
-                                label1.Text = "Выгружаем изображения: " + (set-1).ToString();
+                                set = set - 1;
+                                label1.Text = "Выгружаем изображения: " + (set).ToString();
                                 Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
                                 progressBar1.PerformStep();
                                 int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                                 if (ind != -1)
                                 {
+                                    pcount = pcount + 1;
                                     file.FilePath = Resp[ind].fullpath;
                                     file.FileName = Resp[ind].filename;
                                     if (!File.Exists(rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath)))
@@ -170,10 +202,13 @@ namespace GistologyTransfer
                                     myexcelWorksheet.Cells[r, 8] = file.Scanner;
                                     myexcelWorksheet.Cells[r, 9] = file.Resolution;
                                     myexcelWorksheet.Cells[r, 10] = file.Focus;
+                                    myexcelWorksheet.Cells[r, 12] = file.Color;
 
                                 }
 
                             }
+
+                            myexcelWorksheet.Cells[r, 4] = pcount.ToString();
                         }
                     }
 

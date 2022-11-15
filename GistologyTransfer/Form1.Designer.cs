@@ -38,13 +38,14 @@
             // 
             // button1
             // 
+            this.button1.AutoEllipsis = true;
             this.button1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button1.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
             this.button1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.Location = new System.Drawing.Point(13, 20);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(310, 100);
             this.button1.TabIndex = 0;
@@ -55,9 +56,10 @@
             // 
             // button3
             // 
+            this.button3.AutoEllipsis = true;
             this.button3.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.button3.Location = new System.Drawing.Point(60, 490);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(317, 55);
             this.button3.TabIndex = 2;
@@ -68,7 +70,7 @@
             // progressBar1
             // 
             this.progressBar1.Location = new System.Drawing.Point(13, 585);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(1151, 57);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -77,10 +79,11 @@
             // 
             // button2
             // 
+            this.button2.AutoEllipsis = true;
             this.button2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.button2.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button2.Location = new System.Drawing.Point(773, 490);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(317, 55);
             this.button2.TabIndex = 4;
@@ -113,7 +116,7 @@
             this.Controls.Add(this.progressBar1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form1";

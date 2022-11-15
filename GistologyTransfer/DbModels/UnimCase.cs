@@ -33,5 +33,6 @@ namespace GistologyTransfer.DbModels
         public string Scanner { get; set; }
         public string Resolution { get; set; }
         public string Focus { get; set; }
+        public string Color { get; set; }
     }
 }

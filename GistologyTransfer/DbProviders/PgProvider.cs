@@ -20,25 +20,57 @@ namespace GistologyTransfer.DbProviders
 
         public List<UnimCase> GetCases()
         {
-            string request = @"Select cast(c.id as varchar(36)) id, c.external_label, c.title,  c.creation_date,  
-                                cast(extract(year from c.creation_date) as varchar(4)) as cyear,
-                                r.data::jsonb->>'icd10' as icd10,
-                                r.data::jsonb->>'diagnosis' as diagnosis,
-                                f.title,
-                                cast(count(*) over (partition by c.id,substr(f.title,position('-' in f.title)+1,1)) as varchar(10)) as prepnumber,
-                                substr(f.title,position('-' in f.title)+1,1) as morder,
-                                'Leica AT2' as model,
-                                20 as vision,
-                                1 as focus,
-                                r.micro_description_protocol_text,
-                                c.macro_description_protocol_text
-                                From cases as c
-                                Inner Join reports as r on c.id = r.case_id
-                                Inner join files as f on f.case_id = c.id and f.type = 'snapshot' and f.title not like '%S%'
-                                Where 
-                                c.status = 'validated'
-                                and r.validation_ended_date between @Bdate::date and @Fdate::date + 1 - interval '1 sec'
-                                ORDER BY id, morder, f.title";
+            string request = @"WITH a
+                                AS (
+	                                SELECT cast(c.id as varchar(36)) id
+		                                ,c.external_label
+		                                ,c.title
+		                                ,c.creation_date
+		                                ,extract(year FROM c.creation_date) AS cyear
+		                                ,f.title AS ftitle
+		                                ,r.data::jsonb# > '{materials,slides}' AS s
+		                                ,r.data::jsonb - >> 'icd10' AS icd10
+		                                ,r.data::jsonb - >> 'pathologicalReport' AS diagnosis
+		                                ,cast(count(*) OVER (
+				                                PARTITION BY c.id
+				                                ,Substring(f.title, length(f.title) - position('-' IN reverse(f.title)) + 2, length(f.title) - (length(f.title) - position('-' IN reverse(f.title)) + 1))
+				                                ) AS VARCHAR(10)) AS prepnumber
+		                                ,substr(f.title, position('-' IN f.title) + 1, 1) AS morder
+		                                ,'Leica AT10' AS model
+		                                ,20 AS vision
+		                                ,'' AS focus
+		                                ,r.micro_description_protocol_text
+		                                ,c.macro_description_protocol_text
+	                                FROM cases AS c
+	                                INNER JOIN reports AS r ON c.id = r.case_id
+	                                INNER JOIN files AS f ON f.case_id = c.id
+		                                AND f.type = 'snapshot'
+		                                AND f.title NOT LIKE '%S%'
+	                                WHERE c.STATUS = 'validated'
+		                                AND r.validation_ended_date BETWEEN @Bdate::date 
+											AND @Fdate::date + 1 - interval '1 sec'
+	                                )
+                                SELECT a.id
+	                                ,a.external_label
+	                                ,a.title
+	                                ,a.creation_date
+	                                ,a.cyear
+	                                ,a.icd10
+	                                ,a.diagnosis
+	                                ,a.ftitle
+	                                ,a.prepnumber
+	                                ,a.morder
+	                                ,a.model
+	                                ,a.vision
+	                                ,a.focus
+	                                ,a.micro_description_protocol_text
+	                                ,a.macro_description_protocol_text
+	                                ,val::jsonb - >> 'stain' AS stain
+                                FROM a
+                                JOIN lateral jsonb_array_elements(a.s) obj(val) ON obj.val - >> 'unimCode' = a.ftitle
+                                ORDER BY id
+	                                ,morder
+	                                ,ftitle";
 
             List<UnimCase> res = new List<UnimCase>();
 
@@ -109,9 +141,10 @@ namespace GistologyTransfer.DbProviders
 
                                     File f = new File();
                                     f.FileReq = rd.IsDBNull(7) ? "" : rd.GetString(7).Trim();
-                                    f.Scanner = "Leica AT2";
-                                    f.Resolution = "20";
-                                    f.Focus = "1";
+                                    f.Scanner = rd.IsDBNull(10) ? "" : rd.GetString(10).Trim();
+                                    f.Resolution = rd.IsDBNull(11) ? "" : rd.GetString(11).Trim();
+                                    f.Focus = rd.IsDBNull(12) ? "" : rd.GetString(12).Trim();
+                                    f.Color = rd.IsDBNull(15) ? "" : rd.GetString(15).Trim();
                                     ser.Files.Add(f);
 
                                 }
