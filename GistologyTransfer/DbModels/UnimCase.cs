@@ -23,6 +23,7 @@ namespace GistologyTransfer.DbModels
         public string Icd10 { get; set; }
         public string Diagnosis { get; set; }
         public List<File> Files { get; set; }
+        public string Icd0 { get; set; }
     }
 
     public class File

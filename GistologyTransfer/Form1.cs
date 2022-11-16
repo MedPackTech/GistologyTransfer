@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
@@ -52,6 +53,7 @@ namespace GistologyTransfer
             catch (Exception connex)
             {
                 MessageBox.Show("Ошибка расшифровки строки подключения: " + connex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                label1.Text = "";
                 return;
             }
             //Обращаемся в юним и ищем случаи за нужный период
@@ -59,7 +61,7 @@ namespace GistologyTransfer
             try
             {
                 label1.Text = "Ищем случаи в DP  " + Properties.Settings.Default.DateFrom.ToString("dd.MM.yyyy") + "-" + Properties.Settings.Default.DateTo.ToString("dd.MM.yyyy");
-                var lst = await pg.GetCasesAsync();
+                var lst = pg.GetCases();
 
                 //Считаем количество файлов к выгрузке для вывода в окно и прогресс бара
                 if (lst.Count > 0)
@@ -92,6 +94,7 @@ namespace GistologyTransfer
                     catch (Exception xlex)
                     {
                         MessageBox.Show("Ошибка создания Excel-файла: " + xlex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        label1.Text = "";
                         return;
                     }
                     //Активируем прогресс бар
@@ -164,25 +167,24 @@ namespace GistologyTransfer
                         catch (Exception ex)
                         {
                             MessageBox.Show("Ошибка создания директории: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            label1.Text = "";
                             return;
                         }
 
                         foreach (var ser in item.Series)
                         {
                             r = r + 1;
+                            int pr = r;
 
                             myexcelWorksheet.Cells[r, 2] = ser.IdSeria;
-                            //myexcelWorksheet.Cells[r, 4] = ser.PrepNumber;
                             myexcelWorksheet.Cells[r, 6] = ser.Icd10;
                             myexcelWorksheet.Cells[r, 11] = ser.Diagnosis;
+                            myexcelWorksheet.Cells[r, 7] = ser.Icd0;
 
                             //Счетчик изображений в серии. Считает по фактически найденным.
                             int pcount = 0;
-
                             foreach (var file in ser.Files)
                             {
-                                set = set - 1;
-                                label1.Text = "Выгружаем изображения: " + (set).ToString();
                                 Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
                                 progressBar1.PerformStep();
                                 int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
@@ -208,7 +210,7 @@ namespace GistologyTransfer
 
                             }
 
-                            myexcelWorksheet.Cells[r, 4] = pcount.ToString();
+                            myexcelWorksheet.Cells[pr, 4] = pcount.ToString();
                         }
                     }
 
@@ -230,6 +232,7 @@ namespace GistologyTransfer
             {
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 label1.Text = "";
+                return;
                 //throw;
             }
 

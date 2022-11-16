@@ -26,19 +26,20 @@ namespace GistologyTransfer.DbProviders
 		                                ,c.external_label
 		                                ,c.title
 		                                ,c.creation_date
-		                                ,extract(year FROM c.creation_date) AS cyear
+		                                ,cast(extract(year FROM c.creation_date) AS varchar(4)) AS cyear
 		                                ,f.title AS ftitle
-		                                ,r.data::jsonb# > '{materials,slides}' AS s
-		                                ,r.data::jsonb - >> 'icd10' AS icd10
-		                                ,r.data::jsonb - >> 'pathologicalReport' AS diagnosis
+                                        ,r.data::jsonb ->> 'icdO' as icdO
+		                                ,r.data::jsonb #> '{materials,slides}' AS s
+		                                ,r.data::jsonb ->> 'icd10' AS icd10
+		                                ,r.data::jsonb ->> 'pathologicalReport' AS diagnosis
 		                                ,cast(count(*) OVER (
 				                                PARTITION BY c.id
 				                                ,Substring(f.title, length(f.title) - position('-' IN reverse(f.title)) + 2, length(f.title) - (length(f.title) - position('-' IN reverse(f.title)) + 1))
 				                                ) AS VARCHAR(10)) AS prepnumber
 		                                ,substr(f.title, position('-' IN f.title) + 1, 1) AS morder
-		                                ,'Leica AT10' AS model
-		                                ,20 AS vision
-		                                ,'' AS focus
+		                                ,cast('Leica AT2' as varchar(9)) AS model
+		                                ,cast('20' as varchar(2)) AS vision
+		                                ,cast('' as varchar(1)) AS focus
 		                                ,r.micro_description_protocol_text
 		                                ,c.macro_description_protocol_text
 	                                FROM cases AS c
@@ -65,9 +66,10 @@ namespace GistologyTransfer.DbProviders
 	                                ,a.focus
 	                                ,a.micro_description_protocol_text
 	                                ,a.macro_description_protocol_text
-	                                ,val::jsonb - >> 'stain' AS stain
+	                                ,val::jsonb ->> 'stain' AS stain
+                                    ,a.icdO
                                 FROM a
-                                JOIN lateral jsonb_array_elements(a.s) obj(val) ON obj.val - >> 'unimCode' = a.ftitle
+                                JOIN lateral jsonb_array_elements(a.s) obj(val) ON obj.val ->> 'unimCode' = a.ftitle
                                 ORDER BY id
 	                                ,morder
 	                                ,ftitle";
@@ -135,6 +137,7 @@ namespace GistologyTransfer.DbProviders
                                         ser.Icd10 = rd.IsDBNull(5) ? "" : rd.GetString(5).Trim();
                                         ser.Diagnosis = rd.IsDBNull(6) ? "" : rd.GetString(6).Trim();
                                         ser.Files = new List<File>();
+                                        ser.Icd0 = rd.IsDBNull(16) ? "" : rd.GetString(16).Trim();
 
                                         cc.Series.Add(ser);
                                     }
