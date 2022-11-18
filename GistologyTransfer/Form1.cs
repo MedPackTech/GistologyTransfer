@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -41,6 +42,8 @@ namespace GistologyTransfer
         //Кнопка выгрузки
         private async void button3_Click(object sender, EventArgs e)
         {
+            int fileprogress = 0;
+            
             //Просматриваем рекурсивно весь архив изображений и помещаем в массив объектов
             List<FileArray> Resp = new List<FileArray>();
             label1.Text = "Сканируем архив изображений";
@@ -61,7 +64,7 @@ namespace GistologyTransfer
             try
             {
                 label1.Text = "Ищем случаи в DP  " + Properties.Settings.Default.DateFrom.ToString("dd.MM.yyyy") + "-" + Properties.Settings.Default.DateTo.ToString("dd.MM.yyyy");
-                var lst = pg.GetCases();
+                var lst = await pg.GetCasesAsync();
 
                 //Считаем количество файлов к выгрузке для вывода в окно и прогресс бара
                 if (lst.Count > 0)
@@ -141,14 +144,12 @@ namespace GistologyTransfer
 
                     foreach (var item in lst)
                     {
+                        DateTime starttime = DateTime.Now;
+
+                        
                         r = r + 1;
 
-                        myexcelWorksheet.Cells[r, 1] = item.ExternalId;
-                        myexcelWorksheet.Cells[r, 5] = item.YearIssled;
-                        myexcelWorksheet.Cells[r, 13] = item.Macro;
-                        myexcelWorksheet.Cells[r, 14] = item.Micro;
-
-
+                        int cr = r;
 
                         try
                         {
@@ -170,28 +171,32 @@ namespace GistologyTransfer
                             label1.Text = "";
                             return;
                         }
-
+                        int spcount = 0;
                         foreach (var ser in item.Series)
                         {
+                            int pcount = 0;
+
                             r = r + 1;
 
                             int pr = r;
 
                             //Счетчик изображений в серии. Считает по фактически найденным.
-                            int pcount = 0;
+                            
                             foreach (var file in ser.Files)
                             {
-                                Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
-                                progressBar1.PerformStep();
+                                fileprogress = fileprogress + 1;
+                                Regex reg = new Regex(@".*" + file.FileReq + @".*.rar");
                                 int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                                 if (ind != -1)
                                 {
+                                    spcount = spcount + 1;
                                     pcount = pcount + 1;
                                     file.FilePath = Resp[ind].fullpath;
                                     file.FileName = Resp[ind].filename;
                                     if (!File.Exists(rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath)))
                                     {
-                                        File.Copy(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
+                                      await FileCopy.CopyFileAsync(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
+                                        //  File.Copy(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
                                     }
 
                                     r = r + 1;
@@ -204,16 +209,39 @@ namespace GistologyTransfer
 
                                 }
 
+                                progressBar1.PerformStep();
+
                             }
                             if (pcount > 0)
                             {
+                                myexcelWorksheet.Cells[cr, 1] = item.ExternalId;
+                                myexcelWorksheet.Cells[cr, 5] = item.YearIssled;
+                                myexcelWorksheet.Cells[cr, 13] = item.Macro;
+                                myexcelWorksheet.Cells[cr, 14] = item.Micro;
+
                                 myexcelWorksheet.Cells[pr, 2] = ser.IdSeria;
                                 myexcelWorksheet.Cells[pr, 6] = ser.Icd10;
                                 myexcelWorksheet.Cells[pr, 11] = ser.Diagnosis;
                                 myexcelWorksheet.Cells[pr, 7] = ser.Icd0;
                                 myexcelWorksheet.Cells[pr, 4] = pcount.ToString();
                             }
-                            
+                            else
+                            {
+                                r = r - 1;
+                            }
+
+                            TimeSpan timespent = DateTime.Now - starttime;
+                            int secondsremaining = (int)(timespent.TotalSeconds / progressBar1.Value * (progressBar1.Maximum - progressBar1.Value));
+
+                            TimeSpan time = TimeSpan.FromSeconds(secondsremaining);
+                            string str = time.ToString(@"d\ hh\:mm\:ss");
+
+                            label2.Text = "Оставшееся время: " + str;
+                            label1.Text = "Выгружаем изображения: " + fileprogress.ToString() + "/" +  set.ToString();
+                        }
+                        if (spcount == 0)
+                        {
+                            r = r - 1;
                         }
                     }
 

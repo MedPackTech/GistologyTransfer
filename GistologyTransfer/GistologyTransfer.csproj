@@ -102,6 +102,7 @@
     <Compile Include="DbModels\UnimCase.cs" />
     <Compile Include="DbProviders\DbProviderBase.cs" />
     <Compile Include="DbProviders\PgProvider.cs" />
+    <Compile Include="FileCopy.cs" />
     <Compile Include="SystemClasses\Encryptor.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
