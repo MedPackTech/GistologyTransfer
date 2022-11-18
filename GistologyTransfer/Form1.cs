@@ -234,7 +234,7 @@ namespace GistologyTransfer
                             int secondsremaining = (int)(timespent.TotalSeconds / progressBar1.Value * (progressBar1.Maximum - progressBar1.Value));
 
                             TimeSpan time = TimeSpan.FromSeconds(secondsremaining);
-                            string str = time.ToString(@"d\ hh\:mm\:ss");
+                            string str = time.ToString(@"dd\ hh\:mm\:ss");
 
                             label2.Text = "Оставшееся время: " + str;
                             label1.Text = "Выгружаем изображения: " + fileprogress.ToString() + "/" +  set.ToString();
