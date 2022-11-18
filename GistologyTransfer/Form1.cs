@@ -174,12 +174,8 @@ namespace GistologyTransfer
                         foreach (var ser in item.Series)
                         {
                             r = r + 1;
-                            int pr = r;
 
-                            myexcelWorksheet.Cells[r, 2] = ser.IdSeria;
-                            myexcelWorksheet.Cells[r, 6] = ser.Icd10;
-                            myexcelWorksheet.Cells[r, 11] = ser.Diagnosis;
-                            myexcelWorksheet.Cells[r, 7] = ser.Icd0;
+                            int pr = r;
 
                             //Счетчик изображений в серии. Считает по фактически найденным.
                             int pcount = 0;
@@ -209,8 +205,15 @@ namespace GistologyTransfer
                                 }
 
                             }
-
-                            myexcelWorksheet.Cells[pr, 4] = pcount.ToString();
+                            if (pcount > 0)
+                            {
+                                myexcelWorksheet.Cells[pr, 2] = ser.IdSeria;
+                                myexcelWorksheet.Cells[pr, 6] = ser.Icd10;
+                                myexcelWorksheet.Cells[pr, 11] = ser.Diagnosis;
+                                myexcelWorksheet.Cells[pr, 7] = ser.Icd0;
+                                myexcelWorksheet.Cells[pr, 4] = pcount.ToString();
+                            }
+                            
                         }
                     }
 
