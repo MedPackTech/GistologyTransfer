@@ -185,7 +185,7 @@ namespace GistologyTransfer
                             foreach (var file in ser.Files)
                             {
                                 fileprogress = fileprogress + 1;
-                                Regex reg = new Regex(@".*" + file.FileReq + @".*.rar");
+                                Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
                                 int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                                 if (ind != -1)
                                 {
