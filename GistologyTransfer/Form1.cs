@@ -46,6 +46,10 @@ namespace GistologyTransfer
             
             //Просматриваем рекурсивно весь архив изображений и помещаем в массив объектов
             List<FileArray> Resp = new List<FileArray>();
+            if (!pictureBox1.Visible)
+            {
+                label3.Visible = true;
+            }
             label1.Text = "Сканируем архив изображений";
             Resp = DirSearch(Properties.Settings.Default.ArchivFolder, Resp);
             string cs = "";
@@ -65,7 +69,7 @@ namespace GistologyTransfer
             {
                 label1.Text = "Ищем случаи в DP  " + Properties.Settings.Default.DateFrom.ToString("dd.MM.yyyy") + "-" + Properties.Settings.Default.DateTo.ToString("dd.MM.yyyy");
                 var lst = await pg.GetCasesAsync();
-
+                
                 //Считаем количество файлов к выгрузке для вывода в окно и прогресс бара
                 if (lst.Count > 0)
                 {
@@ -83,7 +87,7 @@ namespace GistologyTransfer
                     }
 
                     label1.Text = "Выгружаем изображения: " + set.ToString();
-
+                    
                     //Пробуем инициализировать и создать эксельку
                     Excel.Application myexcelApplication = null;
                     Excel.Workbook myexcelWorkbook = null;
@@ -235,7 +239,7 @@ namespace GistologyTransfer
 
                             TimeSpan time = TimeSpan.FromSeconds(secondsremaining);
                             string str = time.ToString(@"dd\ hh\:mm\:ss");
-
+                            
                             label2.Text = "Оставшееся время: " + str;
                             label1.Text = "Выгружаем изображения: " + fileprogress.ToString() + "/" +  set.ToString();
                         }
@@ -250,19 +254,23 @@ namespace GistologyTransfer
                     myexcelApplication.Quit();
 
                     progressBar1.Value = set;
-
+                    label3.Visible = false;
                     MessageBox.Show("Выгрузка Завершена", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     label1.Text = "";
+
                 }
                 else
                 {
+                    label3.Visible = false;
                     MessageBox.Show("Нет случаев за указанные даты", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
+                label3.Visible = false;
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 label1.Text = "";
+
                 return;
                 //throw;
             }
@@ -297,6 +305,32 @@ namespace GistologyTransfer
                 Console.WriteLine(excpt.Message);
             }
             return resp;
+        }
+
+        public class KonamiSequence
+        {
+            private static readonly Keys[] KonamiCode = { Keys.Up, Keys.Up, Keys.Down, Keys.Down, Keys.Left, Keys.Right, Keys.Left, Keys.Right, Keys.B, Keys.A };
+
+            private readonly Queue<Keys> _inputKeys = new Queue<Keys>();
+
+            public bool IsCompletedBy(Keys inputKey)
+            {
+                _inputKeys.Enqueue(inputKey);
+
+                while (_inputKeys.Count > KonamiCode.Length)
+                    _inputKeys.Dequeue();
+
+                return _inputKeys.SequenceEqual(KonamiCode);
+            }
+        }
+
+        private readonly KonamiSequence _konamiSequence = new KonamiSequence();
+
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (_konamiSequence.IsCompletedBy(e.KeyCode))
+                pictureBox1.Visible = true;
         }
     }
 }
