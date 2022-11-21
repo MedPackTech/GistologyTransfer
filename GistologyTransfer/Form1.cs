@@ -25,6 +25,9 @@ namespace GistologyTransfer
             InitializeComponent();
         }
 
+        private volatile bool _isRunning;
+
+
         //Кнопка настроек
         private void button1_Click(object sender, EventArgs e)
         {
@@ -42,13 +45,18 @@ namespace GistologyTransfer
         //Кнопка выгрузки
         private async void button3_Click(object sender, EventArgs e)
         {
+            button4.Enabled = true;
+            button4.Visible = true;
+            button3.Visible = false;
+            button3.Enabled = false;
+            button1.Enabled = false;
             int fileprogress = 0;
-            
+
             //Просматриваем рекурсивно весь архив изображений и помещаем в массив объектов
             List<FileArray> Resp = new List<FileArray>();
             if (!pictureBox1.Visible)
             {
-                label3.Visible = true;
+                button1.Text = "Should try KONAMI code";
             }
             label1.Text = "Сканируем архив изображений";
             Resp = DirSearch(Properties.Settings.Default.ArchivFolder, Resp);
@@ -145,12 +153,18 @@ namespace GistologyTransfer
                     int r = 1;
 
                     DirectoryInfo rp = new DirectoryInfo(Properties.Settings.Default.Folder);
-
+                    _isRunning = true;
                     foreach (var item in lst)
                     {
+                        if (!_isRunning)
+                        {
+                            button3.Enabled = true;
+                            button3.Visible = true;
+                            button4.Visible = false;
+                            break;
+                        }
                         DateTime starttime = DateTime.Now;
 
-                        
                         r = r + 1;
 
                         int cr = r;
@@ -185,11 +199,10 @@ namespace GistologyTransfer
                             int pr = r;
 
                             //Счетчик изображений в серии. Считает по фактически найденным.
-                            
                             foreach (var file in ser.Files)
                             {
                                 fileprogress = fileprogress + 1;
-                                Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
+                                Regex reg = new Regex(@".*" + file.FileReq + @".*.rar");
                                 int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                                 if (ind != -1)
                                 {
@@ -199,7 +212,7 @@ namespace GistologyTransfer
                                     file.FileName = Resp[ind].filename;
                                     if (!File.Exists(rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath)))
                                     {
-                                      await FileCopy.CopyFileAsync(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
+                                        await FileCopy.CopyFileAsync(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
                                         //  File.Copy(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
                                     }
 
@@ -248,28 +261,49 @@ namespace GistologyTransfer
                             r = r - 1;
                         }
                     }
+                    try
+                    {
+                        myexcelApplication.ActiveWorkbook.SaveAs(di.FullName + "\\" + DateTime.Now.ToString("yyyyMMdd") + ".xls", Excel.XlFileFormat.xlWorkbookNormal);
+                        myexcelWorkbook.Close();
+                        myexcelApplication.Quit();
+                    }
+                    catch (Exception)
+                    {
 
-                    myexcelApplication.ActiveWorkbook.SaveAs(di.FullName + "\\" + DateTime.Now.ToString("yyyyMMdd") + ".xls", Excel.XlFileFormat.xlWorkbookNormal);
-                    myexcelWorkbook.Close();
-                    myexcelApplication.Quit();
+                    }
+                    
 
                     progressBar1.Value = set;
-                    label3.Visible = false;
+                    button1.Text = "Настройка выгрузки";
                     MessageBox.Show("Выгрузка Завершена", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     label1.Text = "";
-
+                    button3.Enabled = true;
+                    button3.Visible = true;
+                    button4.Enabled = false;
+                    button4.Visible = false;
+                    button1.Enabled = true;
                 }
                 else
                 {
-                    label3.Visible = false;
+                    button1.Text = "Настройка выгрузки";
                     MessageBox.Show("Нет случаев за указанные даты", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    button3.Enabled = true;
+                    button3.Visible = true;
+                    button4.Enabled = false;
+                    button4.Visible = false;
+                    button1.Enabled = true;
                 }
             }
             catch (Exception ex)
             {
-                label3.Visible = false;
+                button1.Text = "Настройка выгрузки";
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 label1.Text = "";
+                button3.Enabled = true;
+                button3.Visible = true;
+                button4.Enabled = false;
+                button4.Visible = false;
+                button1.Enabled = true;
 
                 return;
                 //throw;
@@ -331,6 +365,13 @@ namespace GistologyTransfer
         {
             if (_konamiSequence.IsCompletedBy(e.KeyCode))
                 pictureBox1.Visible = true;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            _isRunning = false;
+            button4.Enabled = false;
+            button4.Text = "Останавливаем...";
         }
     }
 }
