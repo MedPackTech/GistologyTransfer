@@ -52,7 +52,7 @@ namespace GistologyTransfer.DbProviders
 	                                WHERE c.STATUS = 'validated'
 		                                AND r.validation_ended_date BETWEEN @Bdate::date 
 											AND @Fdate::date + 1 - interval '1 sec'
-                                                AND r.data::jsonb ->> 'icd10' = ANY(@Icd10) 
+                                                AND replace(r.data::jsonb ->> 'icd10',' ','') = ANY(@Icd10) 
 	                                )
                                 SELECT a.id
 	                                ,a.external_label
@@ -60,7 +60,7 @@ namespace GistologyTransfer.DbProviders
 	                                ,a.creation_date
 	                                ,a.cyear
 	                                ,a.icd10
-	                                ,a.diagnosis
+	                                ,replace(a.diagnosis,' ','') as diagnosis
 	                                ,a.ftitle
 	                                ,a.prepnumber
 	                                ,a.morder

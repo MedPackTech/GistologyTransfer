@@ -49,6 +49,7 @@ namespace GistologyTransfer
         {
             button4.Enabled = true;
             button4.Visible = true;
+            button4.Text = "Стоп";
             button3.Visible = false;
             button3.Enabled = false;
             button1.Enabled = false;
