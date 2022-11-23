@@ -17,5 +17,11 @@
     <Setting Name="ArchivFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\172.18.13.251\d$\lis-scanner\storage\archive</Value>
     </Setting>
+    <Setting Name="Icd10" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Icd10Arr" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

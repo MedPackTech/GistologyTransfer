@@ -83,5 +83,28 @@ namespace GistologyTransfer.Properties {
                 this["ArchivFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Icd10 {
+            get {
+                return ((string)(this["Icd10"]));
+            }
+            set {
+                this["Icd10"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection Icd10Arr {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["Icd10Arr"]));
+            }
+            set {
+                this["Icd10Arr"] = value;
+            }
+        }
     }
 }

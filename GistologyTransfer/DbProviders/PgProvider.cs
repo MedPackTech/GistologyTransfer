@@ -11,6 +11,8 @@ using System.Data.Common;
 using GistologyTransfer.DbModels;
 using Npgsql.Internal.TypeHandlers;
 using System.Runtime.ConstrainedExecution;
+using static GistologyTransfer.Program;
+using NpgsqlTypes;
 
 namespace GistologyTransfer.DbProviders
 {
@@ -50,6 +52,7 @@ namespace GistologyTransfer.DbProviders
 	                                WHERE c.STATUS = 'validated'
 		                                AND r.validation_ended_date BETWEEN @Bdate::date 
 											AND @Fdate::date + 1 - interval '1 sec'
+                                                AND r.data::jsonb ->> 'icd10' = ANY(@Icd10) 
 	                                )
                                 SELECT a.id
 	                                ,a.external_label
@@ -93,6 +96,15 @@ namespace GistologyTransfer.DbProviders
                         DbType = DbType.String,
                         Value = Properties.Settings.Default.DateTo.ToString("yyyyMMdd")
                     });
+                    exec.Parameters.Add(new NpgsqlParameter()
+                    {
+                        ParameterName = "Icd10",
+                        NpgsqlDbType = NpgsqlDbType.Array | NpgsqlDbType.Varchar,
+                        Value = Properties.Settings.Default.Icd10Arr.Cast<string>().ToList() //Globals.IcdValues
+                    });
+
+
+
 
                     Odbc.Open();
                     if (Odbc.State == ConnectionState.Open)
