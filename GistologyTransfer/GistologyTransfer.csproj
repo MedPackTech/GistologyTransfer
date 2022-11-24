@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\GistologyTransfer.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -111,10 +112,10 @@
     <Compile Include="DbModels\UnimCase.cs" />
     <Compile Include="DbProviders\DbProviderBase.cs" />
     <Compile Include="DbProviders\PgProvider.cs" />
-    <Compile Include="FileCopy.cs" />
-    <Compile Include="Icd10.cs" />
-    <Compile Include="Node.cs" />
-    <Compile Include="NodeRoot.cs" />
+    <Compile Include="SystemClasses\FileCopy.cs" />
+    <Compile Include="Icd10Model\Icd10.cs" />
+    <Compile Include="Icd10Model\Node.cs" />
+    <Compile Include="Icd10Model\NodeRoot.cs" />
     <Compile Include="SystemClasses\Encryptor.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

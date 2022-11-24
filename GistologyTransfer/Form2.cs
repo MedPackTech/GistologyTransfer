@@ -24,6 +24,10 @@ namespace GistologyTransfer
     {
         private Node root;
 
+        /// <summary>
+        /// Инициализация формы настроек. Забираем данные из настроек приложения и из 
+        /// импровизированной БД Icd10Nodes.json
+        /// </summary>
         public Form2()
         {
             InitializeComponent();
@@ -32,14 +36,6 @@ namespace GistologyTransfer
             dateTimePicker2.Value = Properties.Settings.Default.DateTo;
             textBox2.Text = Properties.Settings.Default.ConnString;
             textBox3.Text = Properties.Settings.Default.ArchivFolder;
-
-            //if (this.treeView1.Nodes.Count == 0)
-            //{
-            //    var map = Globals.dg.GroupBy(x => x.ParentId).ToDictionary(x => x.Key, x => x.ToList());
-            //    this.treeView1.BeginUpdate();
-            //    NodeRoot.PopulateTreeView(map, 0, this.treeView1.Nodes);
-            //    this.treeView1.EndUpdate();
-            //}
 
             string readText = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"Icd10nodes.json");
             var result = JsonConvert.DeserializeObject<Icd10Nodes>(readText);
@@ -61,6 +57,11 @@ namespace GistologyTransfer
 
         }
 
+        /// <summary>
+        /// Выбор директории сохранения
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
@@ -74,6 +75,13 @@ namespace GistologyTransfer
             }
         }
 
+        /// <summary>
+        /// Сохранение всех настроек. Сохраняем всё в настройки приложения
+        /// МКБ-10 сохраняем в глобальной перменной IcdValues, а также перезаписываем Icd10nodes.json
+        /// Для сохранения настроек после перезапуска
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void button2_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.Folder = textBox1.Text;
@@ -118,6 +126,11 @@ namespace GistologyTransfer
             MessageBox.Show("Настройки сохранены", "Информация",MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// Штатное закрытие формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button3_Click(object sender, EventArgs e)
         {
             {
@@ -126,6 +139,12 @@ namespace GistologyTransfer
             }
         }
 
+        /// <summary>
+        /// Обработка ошибки пользователя при задании даты начала
+        /// Не может быть больше даты окончания
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
             
@@ -136,6 +155,11 @@ namespace GistologyTransfer
             }
         }
 
+        /// <summary>
+        /// Перевод нештатных закрытий формы в Ок. Настройки в любом случае сохранены, а родительскую форму терять нельзя.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (this.DialogResult == DialogResult.Cancel || this.DialogResult == DialogResult.Abort)
@@ -144,6 +168,12 @@ namespace GistologyTransfer
             }
         }
 
+        /// <summary>
+        /// Обработка ошибки пользователя при задании даты окончания
+        /// Не может быть меньше даты начала
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
         {
             if (this.dateTimePicker2.Value < this.dateTimePicker1.Value)
@@ -168,6 +198,12 @@ namespace GistologyTransfer
             }
         }
 
+        /// <summary>
+        /// Управление иерархией. Отметка или снятие отметок дочерних элементов по отметке родительского.
+        /// Для быстрого выбора последовательности нод.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Checked)
@@ -190,6 +226,11 @@ namespace GistologyTransfer
                
         }
 
+        /// <summary>
+        /// Проставляем/Снимаем галочки на цепочке нод
+        /// </summary>
+        /// <param name="rootNode"></param>
+        /// <param name="isChecked"></param>
         private void CheckChildren(TreeNode rootNode, bool isChecked)
         {
             foreach (TreeNode node in rootNode.Nodes)

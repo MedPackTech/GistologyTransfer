@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace GistologyTransfer.DbManagers
 {
+    /// <summary>
+    /// Общий класс подключения к PostgreSQL
+    /// </summary>
     internal class PgDbManager
     {
         public PgDbManager(string connectionString)
@@ -17,11 +20,19 @@ namespace GistologyTransfer.DbManagers
 
         private string _connectionStr;
 
+        /// <summary>
+        /// Асинхронный вызов метода запроса к БД. Получение случаев.
+        /// </summary>
+        /// <returns></returns>
         public Task<List<UnimCase>> GetCasesAsync()
         {
             return Task.Factory.StartNew(() => { return GetCases(); });
         }
 
+        /// <summary>
+        /// Вход в основной запрос
+        /// </summary>
+        /// <returns></returns>
         public List<UnimCase> GetCases()
         {
             PgSystem _pg = new PgSystem(_connectionStr);

@@ -17,6 +17,10 @@ namespace GistologyTransfer
         public static explicit operator TreeNode(Icd10 e) { return new TreeNode(e.Title); }
     }
 
+    /// <summary>
+    /// Расширение первоначального класса для МКБ-10. Использовалось для первичной обертки справочника в линейную JSON-иерархию
+    /// В текущей версии не применяется
+    /// </summary>
     public static class Icd10Extension
     {
         public static void Add(this Dictionary<int, List<Icd10>> Icd10s, int Id, string Title, int ParentId)

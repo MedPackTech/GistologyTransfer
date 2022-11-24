@@ -9,6 +9,9 @@ using System.Xml.Linq;
 
 namespace GistologyTransfer
 {
+    /// <summary>
+    /// Общий класс представления и работы с нодами TreeView
+    /// </summary>
     [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
     public class Node
     {

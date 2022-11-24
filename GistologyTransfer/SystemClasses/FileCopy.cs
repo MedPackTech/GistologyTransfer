@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace GistologyTransfer
 {
+    /// <summary>
+    /// Асинхронный копировальщик файлов
+    /// </summary>
     public static class FileCopy
     {
 

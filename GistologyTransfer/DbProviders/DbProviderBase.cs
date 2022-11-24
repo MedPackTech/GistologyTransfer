@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace GistologyTransfer.DbProviders
 {
+    /// <summary>
+    /// Универсальная база коннекторов к различным СУБД
+    /// </summary>
     public class DbProviderBase
     {
+        /// <summary>
+        /// Строка подключения
+        /// </summary>
         protected string _connection;
 
         public DbProviderBase(string ConnectionString)
@@ -22,6 +28,10 @@ namespace GistologyTransfer.DbProviders
             }
         }
 
+        /// <summary>
+        /// Закрытие ридера
+        /// </summary>
+        /// <param name="reader"></param>
         protected void EnsureReaderClose(IDataReader reader)
         {
             if (reader != null)
@@ -30,6 +40,10 @@ namespace GistologyTransfer.DbProviders
             }
         }
 
+        /// <summary>
+        /// Уничтожение команды к СУБД
+        /// </summary>
+        /// <param name="command"></param>
         protected void EnsureCommandDispose(IDbCommand command)
         {
             if (command != null)
@@ -38,6 +52,10 @@ namespace GistologyTransfer.DbProviders
             }
         }
 
+        /// <summary>
+        /// Очистка соединения с СУБД
+        /// </summary>
+        /// <param name="connection"></param>
         protected void EnsureConnectionDispose(IDbConnection connection)
         {
             if (connection != null)

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GistologyTransfer.DbModels
 {
+    /// <summary>
+    /// Класс описывает случай в системе UNIM, соответствующий требованиям выгрузки РЦУД
+    /// </summary>
     public class UnimCase
     {
         public string IdIssled { get; set; }

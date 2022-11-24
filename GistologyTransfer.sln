@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GistologyTransfer", "GistologyTransfer\GistologyTransfer.csproj", "{F46461AB-2F93-4F6A-B28B-F47263258504}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{A1E49FC6-9FE5-4B95-B380-087A99330E43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{F46461AB-2F93-4F6A-B28B-F47263258504}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F46461AB-2F93-4F6A-B28B-F47263258504}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F46461AB-2F93-4F6A-B28B-F47263258504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1E49FC6-9FE5-4B95-B380-087A99330E43}.Debug|Any CPU.ActiveCfg = Debug
+		{A1E49FC6-9FE5-4B95-B380-087A99330E43}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

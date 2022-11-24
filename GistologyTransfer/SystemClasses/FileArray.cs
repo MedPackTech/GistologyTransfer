@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GistologyTransfer.SystemClasses
 {
+    /// <summary>
+    /// Класс для создания коллекции фаловой системы
+    /// </summary>
     public class FileArray
     {
         public string filename { get; set; }

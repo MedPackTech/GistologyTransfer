@@ -30,7 +30,11 @@ namespace GistologyTransfer
         private volatile bool _isRunning;
 
 
-        //Кнопка настроек
+        /// <summary>
+        /// Настройки программы. Открытие дочерней формы.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             Form2 childForm = new Form2();            
@@ -44,7 +48,11 @@ namespace GistologyTransfer
 
         }
 
-        //Кнопка выгрузки
+        /// <summary>
+        /// Основной механизм. Выгрузка исследований по кнопке в форме.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void button3_Click(object sender, EventArgs e)
         {
             button4.Enabled = true;
@@ -220,7 +228,7 @@ namespace GistologyTransfer
                                     }
 
                                     r = r + 1;
-
+                                    
                                     myexcelWorksheet.Cells[r, 3] = file.FileName;
                                     myexcelWorksheet.Cells[r, 8] = file.Scanner;
                                     myexcelWorksheet.Cells[r, 9] = file.Resolution;
@@ -270,31 +278,20 @@ namespace GistologyTransfer
                         myexcelWorkbook.Close();
                         myexcelApplication.Quit();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-
+                        MessageBox.Show(ex.Message, "Ошибка записи Excel-файла", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
-                    
-
                     progressBar1.Value = set;
                     button1.Text = "Настройка выгрузки";
                     MessageBox.Show("Выгрузка Завершена", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     label1.Text = "";
-                    button3.Enabled = true;
-                    button3.Visible = true;
-                    button4.Enabled = false;
-                    button4.Visible = false;
-                    button1.Enabled = true;
+                    
                 }
                 else
                 {
                     button1.Text = "Настройка выгрузки";
                     MessageBox.Show("Нет случаев за указанные даты", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    button3.Enabled = true;
-                    button3.Visible = true;
-                    button4.Enabled = false;
-                    button4.Visible = false;
-                    button1.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -302,23 +299,38 @@ namespace GistologyTransfer
                 button1.Text = "Настройка выгрузки";
                 MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 label1.Text = "";
+                return;
+                //throw;
+            }
+            finally
+            {
                 button3.Enabled = true;
                 button3.Visible = true;
                 button4.Enabled = false;
                 button4.Visible = false;
                 button1.Enabled = true;
-
-                return;
-                //throw;
             }
 
         }
 
+        /// <summary>
+        /// Закрытие
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        /// <summary>
+        /// Файловая рекурсия. Первоначально полностью сканируем выбранную директорию архива и сохраняем её структуру.
+        /// Получаем список List FileArray, к которому в последующем обращаемся при сопоставлении случаев БД и файлов
+        /// Чтобы не нагружать дисковую подсистему
+        /// </summary>
+        /// <param name="sDir"></param>
+        /// <param name="resp"></param>
+        /// <returns></returns>
         static List<FileArray> DirSearch(string sDir, List<FileArray> resp)
         {
 
@@ -370,6 +382,12 @@ namespace GistologyTransfer
                 pictureBox1.Visible = true;
         }
 
+        /// <summary>
+        /// Системное прерывание. Обновляет глобальную переменную _isRunning
+        /// При входе в новый цикл обработки случая процесс поиска завершается
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
             _isRunning = false;

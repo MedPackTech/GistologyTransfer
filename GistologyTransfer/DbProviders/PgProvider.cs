@@ -16,10 +16,19 @@ using NpgsqlTypes;
 
 namespace GistologyTransfer.DbProviders
 {
+    /// <summary>
+    /// Класс коннектора к PostgreSQL. Наследование от DbProviderBase
+    /// </summary>
     public class PgSystem : DbProviderBase
     {
         public PgSystem(string connectionString) : base(connectionString) { }
 
+        /// <summary>
+        /// Основной запрос данных от UNIM для выгрузки файлов и формирования отчета
+        /// Запрос возвращает линейные данные, с дальнейщей оберткой под класс UNIM-case
+        /// Возвращает список случаев List UnimCase
+        /// </summary>
+        /// <returns></returns>
         public List<UnimCase> GetCases()
         {
             string request = @"WITH a

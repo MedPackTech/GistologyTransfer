@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace GistologyTransfer
 {
+    /// <summary>
+    /// Универсальный энкриптор. В приложении шифрует строку подключения к БД.
+    /// </summary>
     public class Encryptor
     {
         private static readonly string saltKey = "S#rTKBIf"; // Длина 8 знаков
@@ -68,8 +71,8 @@ namespace GistologyTransfer
         /// <summary>
         /// Дешифрует переданную строку AES.
         /// </summary>
-        /// <param name="plainText">Строка подлежащая дешифрованию.</param>
-        /// <returns>Зашифрованная строка.</returns>
+        /// <param name="encryptedText">Строка подлежащая дешифрованию.</param>
+        /// <returns></returns>
         public static string AES_Decrypt(string encryptedText)
         {
             if (string.IsNullOrWhiteSpace(encryptedText))
@@ -110,8 +113,8 @@ namespace GistologyTransfer
         /// <summary>
         /// Дешифрует переданную строку AES. Асинхронная реализация.
         /// </summary>
-        /// <param name="plainText">Строка подлежащая дешифрованию.</param>
-        /// <returns>Зашифрованная строка.</returns>
+        /// <param name="encryptedText">Строка подлежащая дешифрованию.</param>
+        /// <returns></returns>
         public static Task<string> AES_DecryptAsync(string encryptedText)
         {
             return Task.Factory.StartNew(() => { return AES_Decrypt(encryptedText); });
