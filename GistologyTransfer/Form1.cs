@@ -322,7 +322,7 @@ namespace GistologyTransfer
 
                     try
                     {
-                        if (Directory.Exists(di.FullName))
+                        if (Directory.Exists(di.FullName) && !Properties.Settings.Default.ReportCheck)
                         {
                             if (!Directory.Exists(di.FullName + @"\" + item.ExternalId))
                             {
@@ -367,7 +367,7 @@ namespace GistologyTransfer
                                 pcount = pcount + 1;
                                 file.FilePath = Resp[ind].fullpath;
                                 file.FileName = Resp[ind].filename;
-                                if (!System.IO.File.Exists(rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath)))
+                                if (!System.IO.File.Exists(rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath)) && !Properties.Settings.Default.ReportCheck)
                                 {
                                     try
                                     {

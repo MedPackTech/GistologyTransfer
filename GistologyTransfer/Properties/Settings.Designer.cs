@@ -117,5 +117,17 @@ namespace GistologyTransfer.Properties {
                 this["ImgType"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ReportCheck {
+            get {
+                return ((bool)(this["ReportCheck"]));
+            }
+            set {
+                this["ReportCheck"] = value;
+            }
+        }
     }
 }
