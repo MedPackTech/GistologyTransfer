@@ -71,7 +71,7 @@
             // 
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Location = new System.Drawing.Point(13, 11);
+            this.groupBox1.Location = new System.Drawing.Point(28, 28);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -97,7 +97,7 @@
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.dateTimePicker2);
             this.groupBox2.Controls.Add(this.dateTimePicker1);
-            this.groupBox2.Location = new System.Drawing.Point(13, 264);
+            this.groupBox2.Location = new System.Drawing.Point(28, 281);
             this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -148,7 +148,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(13, 914);
+            this.button2.Location = new System.Drawing.Point(28, 931);
             this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(160, 52);
@@ -159,7 +159,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(178, 914);
+            this.button3.Location = new System.Drawing.Point(193, 931);
             this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(158, 52);
@@ -171,7 +171,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.textBox2);
-            this.groupBox3.Location = new System.Drawing.Point(13, 366);
+            this.groupBox3.Location = new System.Drawing.Point(28, 383);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -194,7 +194,7 @@
             // 
             this.groupBox4.Controls.Add(this.button4);
             this.groupBox4.Controls.Add(this.textBox3);
-            this.groupBox4.Location = new System.Drawing.Point(13, 150);
+            this.groupBox4.Location = new System.Drawing.Point(28, 167);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
@@ -239,7 +239,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.treeView1);
-            this.groupBox5.Location = new System.Drawing.Point(13, 474);
+            this.groupBox5.Location = new System.Drawing.Point(28, 491);
             this.groupBox5.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
@@ -251,7 +251,7 @@
             // groupBox6
             // 
             this.groupBox6.Controls.Add(this.comboBox1);
-            this.groupBox6.Location = new System.Drawing.Point(790, 264);
+            this.groupBox6.Location = new System.Drawing.Point(805, 281);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(207, 94);
             this.groupBox6.TabIndex = 9;
@@ -279,7 +279,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1015, 991);
+            this.ClientSize = new System.Drawing.Size(1047, 1029);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
