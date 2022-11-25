@@ -36,6 +36,7 @@ namespace GistologyTransfer
             dateTimePicker2.Value = Properties.Settings.Default.DateTo;
             textBox2.Text = Properties.Settings.Default.ConnString;
             textBox3.Text = Properties.Settings.Default.ArchivFolder;
+            this.comboBox1.Text = Properties.Settings.Default.ImgType;
 
             string readText = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + @"Icd10nodes.json");
             var result = JsonConvert.DeserializeObject<Icd10Nodes>(readText);
@@ -87,6 +88,7 @@ namespace GistologyTransfer
             Properties.Settings.Default.Folder = textBox1.Text;
             Properties.Settings.Default.DateFrom = this.dateTimePicker1.Value;
             Properties.Settings.Default.DateTo = this.dateTimePicker2.Value;
+            Properties.Settings.Default.ImgType = this.comboBox1.Text;
 
             if (textBox2.Text.ToLower().StartsWith("server="))
             {

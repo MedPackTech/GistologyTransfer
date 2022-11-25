@@ -359,7 +359,7 @@ namespace GistologyTransfer
                             }
 
                             fileprogress = fileprogress + 1;
-                            Regex reg = new Regex(@".*" + file.FileReq + @".*.svs");
+                            Regex reg = new Regex(@".*" + file.FileReq + @".*" + Properties.Settings.Default.ImgType);
                             int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                             if (ind != -1)
                             {

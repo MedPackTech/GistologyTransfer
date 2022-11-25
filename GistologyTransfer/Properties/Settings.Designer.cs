@@ -105,5 +105,17 @@ namespace GistologyTransfer.Properties {
                 this["Icd10Arr"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ImgType {
+            get {
+                return ((string)(this["ImgType"]));
+            }
+            set {
+                this["ImgType"] = value;
+            }
+        }
     }
 }
