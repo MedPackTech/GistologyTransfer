@@ -87,14 +87,13 @@ namespace GistologyTransfer
             Properties.Settings.Default.Folder = textBox1.Text;
             Properties.Settings.Default.DateFrom = this.dateTimePicker1.Value;
             Properties.Settings.Default.DateTo = this.dateTimePicker2.Value;
-            if (!Properties.Settings.Default.ConnString.ToLower().StartsWith("server="))
+
+            if (textBox2.Text.ToLower().StartsWith("server="))
             {
                 Properties.Settings.Default.ConnString = textBox2.Text;
-            }
-            else
-            {
                 Properties.Settings.Default.ConnString = await Encryptor.AES_EcnryptAsync(textBox2.Text);
             }
+
             Properties.Settings.Default.ArchivFolder = textBox3.Text;
             
 

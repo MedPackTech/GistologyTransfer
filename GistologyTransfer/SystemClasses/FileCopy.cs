@@ -24,5 +24,17 @@ namespace GistologyTransfer
             }
 
         }
+
+        public static void CopyFile(string sourcePath, string destinationPath)
+        {
+            using (Stream source = File.OpenRead(sourcePath))
+            {
+                using (Stream destination = File.Create(destinationPath))
+                {
+                    source.CopyTo(destination);
+                }
+            }
+
+        }
     }
 }
