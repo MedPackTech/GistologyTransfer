@@ -12,7 +12,7 @@
       <Value Profile="(Default)">2022-10-08</Value>
     </Setting>
     <Setting Name="ConnString" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Server=172.18.13.21;Port=5432;Database=dpathology;UserId=rzd;Password=FrvHAWA0ZDuIEIim;</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ArchivFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">\\172.18.13.251\d$\lis-scanner\storage\archive</Value>

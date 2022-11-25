@@ -61,8 +61,7 @@ namespace GistologyTransfer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=172.18.13.21;Port=5432;Database=dpathology;UserId=rzd;Password=FrvHAWA0ZDu" +
-            "IEIim;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ConnString {
             get {
                 return ((string)(this["ConnString"]));

@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -55,6 +56,19 @@ namespace GistologyTransfer
         /// <param name="e"></param>
         private async void button3_Click(object sender, EventArgs e)
         {
+
+            if (!Directory.Exists(Properties.Settings.Default.ArchivFolder))
+            {
+                MessageBox.Show("Файловый архив недоступен, проверьте правильность указанного пути", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!Directory.Exists(Properties.Settings.Default.Folder))
+            {
+                MessageBox.Show("Путь выгрузки недоступен, проверьте правильность указанного пути", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             button4.Enabled = true;
             button4.Visible = true;
             button4.Text = "Стоп";
@@ -65,12 +79,15 @@ namespace GistologyTransfer
 
             //Просматриваем рекурсивно весь архив изображений и помещаем в массив объектов
             List<FileArray> Resp = new List<FileArray>();
+
+            Resp = DirSearch(Properties.Settings.Default.ArchivFolder, Resp);
+             
             if (!pictureBox1.Visible)
             {
                 button1.Text = "Should try KONAMI code";
             }
             label1.Text = "Сканируем архив изображений";
-            Resp = DirSearch(Properties.Settings.Default.ArchivFolder, Resp);
+
             string cs = "";
             try
             {
