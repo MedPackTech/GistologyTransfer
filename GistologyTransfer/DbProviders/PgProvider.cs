@@ -68,8 +68,8 @@ namespace GistologyTransfer.DbProviders
 	                                ,a.title
 	                                ,a.creation_date
 	                                ,a.cyear
-	                                ,a.icd10
-	                                ,replace(a.diagnosis,' ','') as diagnosis
+	                                ,replace(a.icd10,' ','') as icd10
+	                                ,a.diagnosis as diagnosis
 	                                ,a.ftitle
 	                                ,a.prepnumber
 	                                ,a.morder

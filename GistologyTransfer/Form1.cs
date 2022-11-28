@@ -412,7 +412,7 @@ namespace GistologyTransfer
                             r = r - 1;
                         }
                     }
-                    if (spcount == 0)
+                    if (spcount == 0 && !Properties.Settings.Default.ReportCheck)
                     {
                         r = r - 1;
                     }
