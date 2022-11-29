@@ -436,7 +436,7 @@ namespace GistologyTransfer
                             Directory.Delete(rs.FullName);
                         }
                     }
-                    if (spcount == 0 && !Properties.Settings.Default.ReportCheck)
+                    if (spcount == 0)
                     {
                         r = r - 1;
                         Directory.Delete(rp.FullName);
