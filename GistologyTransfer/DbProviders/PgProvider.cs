@@ -43,11 +43,8 @@ namespace GistologyTransfer.DbProviders
 		                                ,r.data::jsonb #> '{materials,slides}' AS s
 		                                ,r.data::jsonb ->> 'icd10' AS icd10
 		                                ,r.data::jsonb ->> 'pathologicalReport' AS diagnosis
-		                                ,cast(count(*) OVER (
-				                                PARTITION BY c.id
-				                                ,Substring(f.title, length(f.title) - position('-' IN reverse(f.title)) + 2, length(f.title) - (length(f.title) - position('-' IN reverse(f.title)) + 1))
-				                                ) AS VARCHAR(10)) AS prepnumber
-		                                ,substr(f.title, position('-' IN f.title) + 1, 1) AS morder
+		                                ,substring(f.title,1,length(f.title) - position('-' IN reverse(f.title))) as seria
+		                                ,reverse(substring(reverse(f.title),1, position('-' IN reverse(f.title)) - 1)) AS prep
 		                                ,cast('Leica AT2' as varchar(9)) AS model
 		                                ,cast('20' as varchar(2)) AS vision
 		                                ,cast('' as varchar(1)) AS focus
@@ -61,7 +58,7 @@ namespace GistologyTransfer.DbProviders
 	                                WHERE c.STATUS = 'validated'
 		                                AND r.validation_ended_date BETWEEN @Bdate::date 
 											AND @Fdate::date + 1 - interval '1 sec'
-                                                AND replace(r.data::jsonb ->> 'icd10',' ','') = ANY(@Icd10) 
+                                                AND replace(r.data::jsonb ->> 'icd10',' ','') = ANY(@Icd10)  
 	                                )
                                 SELECT a.id
 	                                ,a.external_label
@@ -71,8 +68,8 @@ namespace GistologyTransfer.DbProviders
 	                                ,replace(a.icd10,' ','') as icd10
 	                                ,a.diagnosis as diagnosis
 	                                ,a.ftitle
-	                                ,a.prepnumber
-	                                ,a.morder
+	                                ,a.seria
+	                                ,a.prep
 	                                ,a.model
 	                                ,a.vision
 	                                ,a.focus
@@ -82,9 +79,7 @@ namespace GistologyTransfer.DbProviders
                                     ,a.icdO
                                 FROM a
                                 JOIN lateral jsonb_array_elements(a.s) obj(val) ON obj.val ->> 'unimCode' = a.ftitle
-                                ORDER BY id
-	                                ,morder
-	                                ,ftitle";
+                                ORDER BY id, seria, prep";
 
             List<UnimCase> res = new List<UnimCase>();
 
@@ -153,7 +148,7 @@ namespace GistologyTransfer.DbProviders
                                         cSid = currSeriaId;
 
                                         ser = new Seria();
-                                        ser.IdSeria = rd.IsDBNull(7) ? "" : rd.GetString(7).Trim();
+                                        ser.IdSeria = rd.IsDBNull(8) ? "" : rd.GetString(8).Trim();
                                         ser.PrepNumber = rd.IsDBNull(9) ? "" : rd.GetString(9).Trim();
                                         ser.Icd10 = rd.IsDBNull(5) ? "" : rd.GetString(5).Trim();
                                         ser.Diagnosis = rd.IsDBNull(6) ? "" : rd.GetString(6).Trim();

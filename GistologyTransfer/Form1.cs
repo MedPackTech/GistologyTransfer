@@ -342,6 +342,25 @@ namespace GistologyTransfer
                     int spcount = 0;
                     foreach (var ser in item.Series)
                     {
+                        DirectoryInfo rs = new DirectoryInfo(Properties.Settings.Default.Folder);
+
+                        try
+                        {
+                            if (!Directory.Exists(rp.FullName + @"\" + ser.IdSeria))
+                            {
+                                rs = Directory.CreateDirectory(rp.FullName + @"\" + ser.IdSeria);
+                            }
+                            else
+                            {
+                                rs = new DirectoryInfo(rp.FullName + @"\" + ser.IdSeria);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Ошибка создания директории серии: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
                         int pcount = 0;
 
                         r = r + 1;
@@ -359,7 +378,7 @@ namespace GistologyTransfer
                             }
 
                             fileprogress = fileprogress + 1;
-                            Regex reg = new Regex(@".*" + file.FileReq + @".*" + Properties.Settings.Default.ImgType);
+                            Regex reg = new Regex(@".*" + file.FileReq + @"_.*" + Properties.Settings.Default.ImgType);
                             int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
                             if (ind != -1)
                             {
@@ -367,15 +386,19 @@ namespace GistologyTransfer
                                 pcount = pcount + 1;
                                 file.FilePath = Resp[ind].fullpath;
                                 file.FileName = Resp[ind].filename;
-                                if (!System.IO.File.Exists(rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath)) && !Properties.Settings.Default.ReportCheck)
+                                if (!Properties.Settings.Default.ReportCheck)
                                 {
                                     try
                                     {
-                                        FileCopy.CopyFile(file.FilePath, rp.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
+                                        FileCopy.CopyFile(file.FilePath, rs.FullName.ToString() + @"\" + Path.GetFileName(file.FilePath));
                                     }
                                     catch (Exception fex)
                                     {
-                                        Console.WriteLine(fex.Message);
+                                        using (EventLog eventLog = new EventLog("Application"))
+                                        {
+                                            eventLog.Source = "Application";
+                                            eventLog.WriteEntry("Error copy File from archive: " + fex.Message, EventLogEntryType.Error, 501, 1);
+                                        }
                                     }
                                 }
 
@@ -410,11 +433,13 @@ namespace GistologyTransfer
                         else
                         {
                             r = r - 1;
+                            Directory.Delete(rs.FullName);
                         }
                     }
                     if (spcount == 0 && !Properties.Settings.Default.ReportCheck)
                     {
                         r = r - 1;
+                        Directory.Delete(rp.FullName);
                     }
                 }
                 try
