@@ -346,7 +346,7 @@ namespace GistologyTransfer
 
                         try
                         {
-                            if (!Directory.Exists(rp.FullName + @"\" + ser.IdSeria))
+                            if (!Directory.Exists(rp.FullName + @"\" + ser.IdSeria) && !Properties.Settings.Default.ReportCheck)
                             {
                                 rs = Directory.CreateDirectory(rp.FullName + @"\" + ser.IdSeria);
                             }
@@ -379,7 +379,7 @@ namespace GistologyTransfer
 
                             fileprogress = fileprogress + 1;
                             Regex reg = new Regex(@".*" + file.FileReq + @"_.*" + Properties.Settings.Default.ImgType);
-                            int ind = Resp.FindIndex(s => reg.Match(s.fullpath).Success);
+                            int ind = Resp.FindIndex(s => reg.Match(s.filename).Success);
                             if (ind != -1)
                             {
                                 spcount = spcount + 1;
@@ -433,13 +433,23 @@ namespace GistologyTransfer
                         else
                         {
                             r = r - 1;
-                            Directory.Delete(rs.FullName);
+                            if (!Properties.Settings.Default.ReportCheck)
+                            {
+                                Directory.Delete(rs.FullName);
+                            }
+                            
+                            
                         }
                     }
                     if (spcount == 0)
                     {
                         r = r - 1;
-                        Directory.Delete(rp.FullName);
+                        if (!Properties.Settings.Default.ReportCheck)
+                        {
+                            Directory.Delete(rp.FullName);
+                        }
+                       
+                        
                     }
                 }
                 try

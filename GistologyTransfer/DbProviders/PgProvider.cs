@@ -58,7 +58,7 @@ namespace GistologyTransfer.DbProviders
 	                                WHERE c.STATUS = 'validated'
 		                                AND r.validation_ended_date BETWEEN @Bdate::date 
 											AND @Fdate::date + 1 - interval '1 sec'
-                                                AND replace(r.data::jsonb ->> 'icd10',' ','') = ANY(@Icd10)  
+                                                AND replace(r.data::jsonb ->> 'icd10',' ','') = ANY(@Icd10)
 	                                )
                                 SELECT a.id
 	                                ,a.external_label
@@ -142,7 +142,7 @@ namespace GistologyTransfer.DbProviders
                                         cc.Micro = rd.IsDBNull(13) ? String.Empty : rd.GetString(13).Trim();
                                         cc.Series = new List<Seria>();
                                     }
-                                    string currSeriaId = rd.IsDBNull(7) ? "" : rd.GetString(7).Trim();
+                                    string currSeriaId = rd.IsDBNull(8) ? "" : rd.GetString(8).Trim();
                                     if (currSeriaId != cSid)
                                     {
                                         cSid = currSeriaId;
