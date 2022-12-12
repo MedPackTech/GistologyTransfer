@@ -146,8 +146,8 @@ namespace GistologyTransfer.DbProviders
                                         cc.Micro = rd.IsDBNull(13) ? String.Empty : rd.GetString(13).Trim();
                                         cc.Diagnosis = rd.IsDBNull(6) ? "" : rd.GetString(6).Trim();
                                         cc.Series = new List<Seria>();
-                                        cc.Age = rd.IsDBNull(17) ? "" : rd.GetString(17).Trim();
-                                        cc.Gender = rd.IsDBNull(18) ? "" : rd.GetString(18).Trim();
+                                        cc.Gender = rd.IsDBNull(17) ? "" : rd.GetString(17).Trim();
+                                        cc.Age = rd.IsDBNull(18) ? "" : rd.GetString(18).Trim();
                                     }
                                     string currSeriaId = rd.IsDBNull(8) ? "" : rd.GetString(8).Trim();
                                     if (currSeriaId != cSid)
