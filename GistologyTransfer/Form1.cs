@@ -296,10 +296,12 @@ namespace GistologyTransfer
                 myexcelWorksheet.Cells[1, 8] = "Сканер";
                 myexcelWorksheet.Cells[1, 9] = "Разрешение сканирования";
                 myexcelWorksheet.Cells[1, 10] = "Фокус";
-                myexcelWorksheet.Cells[1, 11] = "Гистологический диагноз";
-                myexcelWorksheet.Cells[1, 12] = "Дополнительный код";
-                myexcelWorksheet.Cells[1, 13] = "Макроскопическое описание";
-                myexcelWorksheet.Cells[1, 14] = "Микроскопическое описание";
+                myexcelWorksheet.Cells[1, 11] = "Дополнительный код";
+                myexcelWorksheet.Cells[1, 12] = "Пол";
+                myexcelWorksheet.Cells[1, 13] = "Возраст";
+                myexcelWorksheet.Cells[1, 14] = "Гистологический диагноз";
+                myexcelWorksheet.Cells[1, 15] = "Макроскопическое описание";
+                myexcelWorksheet.Cells[1, 16] = "Микроскопическое описание";
 
                 int r = 1;
 
@@ -408,7 +410,7 @@ namespace GistologyTransfer
                                 myexcelWorksheet.Cells[r, 8] = file.Scanner;
                                 myexcelWorksheet.Cells[r, 9] = file.Resolution;
                                 myexcelWorksheet.Cells[r, 10] = file.Focus;
-                                myexcelWorksheet.Cells[r, 12] = file.Color;
+                                myexcelWorksheet.Cells[r, 11] = file.Color;
 
                             }
 
@@ -419,16 +421,10 @@ namespace GistologyTransfer
                         }
                         if (pcount > 0)
                         {
-                            myexcelWorksheet.Cells[cr, 1] = item.ExternalId;
-                            myexcelWorksheet.Cells[cr, 5] = item.YearIssled;
-                            myexcelWorksheet.Cells[cr, 13] = item.Macro;
-                            myexcelWorksheet.Cells[cr, 14] = item.Micro;
-
                             myexcelWorksheet.Cells[pr, 2] = ser.IdSeria;
-                            myexcelWorksheet.Cells[pr, 6] = ser.Icd10;
-                            myexcelWorksheet.Cells[pr, 11] = ser.Diagnosis;
-                            myexcelWorksheet.Cells[pr, 7] = ser.Icd0;
                             myexcelWorksheet.Cells[pr, 4] = pcount.ToString();
+                            myexcelWorksheet.Cells[pr, 6] = ser.Icd10;
+                            myexcelWorksheet.Cells[pr, 7] = ser.Icd0;
                         }
                         else
                         {
@@ -450,6 +446,16 @@ namespace GistologyTransfer
                         }
                        
                         
+                    }
+                    else
+                    {
+                        myexcelWorksheet.Cells[cr, 1] = item.ExternalId;
+                        myexcelWorksheet.Cells[cr, 5] = item.YearIssled;
+                        myexcelWorksheet.Cells[cr, 12] = item.Gender;
+                        myexcelWorksheet.Cells[cr, 13] = item.Age;
+                        myexcelWorksheet.Cells[cr, 14] = item.Diagnosis;
+                        myexcelWorksheet.Cells[cr, 15] = item.Macro;
+                        myexcelWorksheet.Cells[cr, 16] = item.Micro;             
                     }
                 }
                 try

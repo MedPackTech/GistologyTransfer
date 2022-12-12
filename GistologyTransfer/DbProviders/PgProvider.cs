@@ -39,6 +39,8 @@ namespace GistologyTransfer.DbProviders
 		                                ,c.creation_date
 		                                ,cast(extract(year FROM c.creation_date) AS varchar(4)) AS cyear
 		                                ,f.title AS ftitle
+                                        ,r.data::jsonb ->> 'patientGender' as gender
+                                        ,r.data::jsonb ->> 'patientBirthday' as birthday
                                         ,r.data::jsonb ->> 'icdO' as icdO
 		                                ,r.data::jsonb #> '{materials,slides}' AS s
 		                                ,r.data::jsonb ->> 'icd10' AS icd10
@@ -77,6 +79,8 @@ namespace GistologyTransfer.DbProviders
 	                                ,a.macro_description_protocol_text
 	                                ,val::jsonb ->> 'stain' AS stain
                                     ,a.icdO
+                                    ,a.gender
+                                    ,CAST(EXTRACT(YEAR FROM AGE(a.creation_date,a.birthday::date)) as VARCHAR(3)) as age
                                 FROM a
                                 JOIN lateral jsonb_array_elements(a.s) obj(val) ON obj.val ->> 'unimCode' = a.ftitle
                                 ORDER BY id, seria, prep";
@@ -140,7 +144,10 @@ namespace GistologyTransfer.DbProviders
                                         cc.YearIssled = rd.IsDBNull(4) ? String.Empty : rd.GetString(4).Trim();
                                         cc.Macro = rd.IsDBNull(14) ? String.Empty : rd.GetString(14).Trim();
                                         cc.Micro = rd.IsDBNull(13) ? String.Empty : rd.GetString(13).Trim();
+                                        cc.Diagnosis = rd.IsDBNull(6) ? "" : rd.GetString(6).Trim();
                                         cc.Series = new List<Seria>();
+                                        cc.Age = rd.IsDBNull(17) ? "" : rd.GetString(17).Trim();
+                                        cc.Gender = rd.IsDBNull(18) ? "" : rd.GetString(18).Trim();
                                     }
                                     string currSeriaId = rd.IsDBNull(8) ? "" : rd.GetString(8).Trim();
                                     if (currSeriaId != cSid)
@@ -151,7 +158,6 @@ namespace GistologyTransfer.DbProviders
                                         ser.IdSeria = rd.IsDBNull(8) ? "" : rd.GetString(8).Trim();
                                         ser.PrepNumber = rd.IsDBNull(9) ? "" : rd.GetString(9).Trim();
                                         ser.Icd10 = rd.IsDBNull(5) ? "" : rd.GetString(5).Trim();
-                                        ser.Diagnosis = rd.IsDBNull(6) ? "" : rd.GetString(6).Trim();
                                         ser.Files = new List<File>();
                                         ser.Icd0 = rd.IsDBNull(16) ? "" : rd.GetString(16).Trim();
 

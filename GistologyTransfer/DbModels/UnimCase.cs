@@ -16,6 +16,9 @@ namespace GistologyTransfer.DbModels
         public string YearIssled { get; set; }
         public string Macro { get; set; }
         public string Micro { get; set; }
+        public string Diagnosis { get; set; }
+        public string Age { get; set; }
+        public string Gender { get; set; }
         public List<Seria> Series { get; set; }
     }
 
@@ -24,7 +27,6 @@ namespace GistologyTransfer.DbModels
         public string IdSeria { get; set; }
         public string PrepNumber { get; set; }
         public string Icd10 { get; set; }
-        public string Diagnosis { get; set; }
         public List<File> Files { get; set; }
         public string Icd0 { get; set; }
     }
