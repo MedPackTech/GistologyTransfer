@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Npgsql;
-using System.Security.Cryptography;
-using System.Data.Common;
 using GistologyTransfer.DbModels;
-using Npgsql.Internal.TypeHandlers;
-using System.Runtime.ConstrainedExecution;
-using static GistologyTransfer.Program;
 using NpgsqlTypes;
 
 namespace GistologyTransfer.DbProviders
@@ -79,7 +71,7 @@ namespace GistologyTransfer.DbProviders
 	                                ,a.macro_description_protocol_text
 	                                ,val::jsonb ->> 'stain' AS stain
                                     ,a.icdO
-                                    ,a.gender
+                                    ,CASE WHEN lower(a.gender)='m' THEN 'М' ELSE 'Ж' END as gender
                                     ,CAST(EXTRACT(YEAR FROM AGE(a.creation_date,a.birthday::date)) as VARCHAR(3)) as age
                                 FROM a
                                 JOIN lateral jsonb_array_elements(a.s) obj(val) ON obj.val ->> 'unimCode' = a.ftitle
@@ -185,6 +177,5 @@ namespace GistologyTransfer.DbProviders
             }
             return res;
         }
-
     }
 }
